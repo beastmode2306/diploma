@@ -1,0 +1,68 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: ./evc
+      dockerfile: Dockerfile
+    ports:
+      - '8000:8000'
+    restart: on-failure
+    depends_on:
+      - db
+      - rabbitmq
+    networks:
+      - postgres_bridge_network
+      - rabbitmq_bridge_network
+  app-consumer:
+    build:
+      context: ./evc-consumer
+      dockerfile: Dockerfile
+    ports:
+      - '8001:8001'
+    restart: on-failure
+    depends_on:
+      - rabbitmq
+    networks:
+      - rabbitmq_bridge_network
+  db:
+    image: postgres
+    restart: always
+    container_name: "postgres"
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: main
+      PGDATA: /data/postgres
+    volumes:
+      - postgres-db:/data/postgres
+    networks:
+        - postgres_bridge_network
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: "rabbitmq"
+    restart: always
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/
+      - rabbitmq_log:/var/log/rabbitmq/
+    networks:
+      - rabbitmq_bridge_network
+
+volumes:
+  rabbitmq_data:
+    driver: local
+  rabbitmq_log:
+    driver: local
+  postgres-db:
+    driver: local
+
+networks:
+  rabbitmq_bridge_network:
+    driver: bridge
+  postgres_bridge_network:
+    driver: bridge

@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ApiKeyRequest {
+  id              Int                 @id @default(autoincrement())
+  company_name    String
+  company_email   String
+  company_country String
+  message         String?
+  status          ApiKeyRequestStatus @default(PENDING)
+}
+
+model Company {
+  id      Int           @id @default(autoincrement())
+  email   String        @unique
+  name    String?
+  country String?
+  status  CompanyStatus @default(ACTIVE)
+  keys    Key[]
+}
+
+model Key {
+  id        Int       @id @default(autoincrement())
+  key       String    @unique
+  company   Company   @relation(fields: [companyId], references: [id])
+  companyId Int
+  status    KeyStatus @default(ACTIVE)
+}
+
+enum ApiKeyRequestStatus {
+  APPROVED
+  DECLINED
+  PENDING
+}
+
+enum KeyStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum CompanyStatus {
+  ACTIVE
+  INACTIVE
+  DELETED
+}
