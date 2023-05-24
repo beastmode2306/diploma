@@ -6,13 +6,14 @@ import {
 } from '@nestjs/microservices';
 import { ApiController } from './api.controller';
 import { ConfigService } from '@nestjs/config';
+import { ApiService } from './api.service';
 
 @Module({
   imports: [],
   controllers: [ApiController],
   providers: [
     {
-      provide: 'API_SERVICE',
+      provide: 'QUEUE_SERVICE',
       useFactory: (configService: ConfigService) => {
         const user = configService.get('RABBIT_USER');
         const password = configService.get('RABBIT_PASSWORD');
@@ -31,6 +32,7 @@ import { ConfigService } from '@nestjs/config';
       },
       inject: [ConfigService],
     },
+    ApiService,
   ],
 })
 export class ApiModule {}

@@ -3,10 +3,13 @@ import { ClientProxy } from '@nestjs/microservices';
 
 @Controller('api')
 export class ApiController {
-  constructor(@Inject('API_SERVICE') private apiService: ClientProxy) {}
+  constructor(@Inject('QUEUE_SERVICE') private queueService: ClientProxy) {}
 
   @Post('order')
   async submitOrder() {
-    return this.apiService.emit('submit_order', { message: 'Hello world' });
+    return this.queueService.send(
+      { cmd: 'submit_order' },
+      { message: 'Hello world' },
+    );
   }
 }
