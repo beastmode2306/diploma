@@ -3,7 +3,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Prisma, ApiKeyRequest, Company } from '@prisma/client';
+import {
+  Prisma,
+  ApiKeyRequest,
+  Company,
+  ApiKeyRequestStatus,
+  KeyStatus,
+} from '@prisma/client';
 
 import { createHash, randomBytes } from 'crypto';
 
@@ -28,6 +34,21 @@ export class KeyService {
     companyCountry,
     message,
   }: SubmitApiKeyRequestDto): Promise<ApiKeyRequest> {
+    const existingRequest = await this.prisma.apiKeyRequest.findFirst({
+      where: {
+        company_email: companyEmail,
+        status: {
+          not: ApiKeyRequestStatus.DECLINED,
+        },
+      },
+    });
+
+    if (existingRequest) {
+      throw new BadRequestException(
+        'There is already a pending request for this email',
+      );
+    }
+
     return this.prisma.apiKeyRequest.create({
       data: {
         company_name: companyName,
@@ -101,6 +122,33 @@ export class KeyService {
     return {
       company,
       key,
+    };
+  }
+
+  async isApiKeyValid(
+    apiKey: string,
+  ): Promise<{ valid: boolean; companyId: number | null }> {
+    if (!apiKey) {
+      return { valid: false, companyId: null };
+    }
+
+    const key = await this.prisma.key.findFirst({
+      where: {
+        key: apiKey,
+        status: KeyStatus.ACTIVE,
+      },
+      include: {
+        company: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    return {
+      valid: !!key,
+      companyId: key ? key.company.id : null,
     };
   }
 

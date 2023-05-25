@@ -1,15 +1,13 @@
 import { Module } from '@nestjs/common';
-import {
-  ClientProxyFactory,
-  ClientsModule,
-  Transport,
-} from '@nestjs/microservices';
+import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 import { ApiController } from './api.controller';
 import { ConfigService } from '@nestjs/config';
 import { ApiService } from './api.service';
+import { NotificationModule } from '../notification/notification.module';
+import { KeyModule } from '../key/key.module';
 
 @Module({
-  imports: [],
+  imports: [NotificationModule, KeyModule],
   controllers: [ApiController],
   providers: [
     {
@@ -34,5 +32,6 @@ import { ApiService } from './api.service';
     },
     ApiService,
   ],
+  exports: [ApiService],
 })
 export class ApiModule {}
