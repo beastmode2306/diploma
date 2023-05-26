@@ -1,9 +1,19 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import SubmitApiKeyRequestForm from "../components/forms/SubmitApiKeyRequestForm.vue";
+import LoginExistingApiKeyForm from "../components/forms/LoginExistingApiKeyForm.vue";
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <SubmitApiKeyRequestForm/>
+    <LoginExistingApiKeyForm/>
   </main>
 </template>
+
+<style scoped>
+
+main {
+  margin-top: 25px;
+}
+
+</style>

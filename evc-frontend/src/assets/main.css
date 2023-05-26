@@ -1,35 +1,20 @@
 @import './base.css';
 
+:root {
+  --base-color: #6FE69F;
+  --base-secondary-color: #0e1f17;
+
+  --base-secondary-color-hover: #1e4231;
+
+  --base-disabled-color: #393939;
+
+  --base-danger-color: #ff0658;
+}
+
 #app {
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
-
+  max-width: 1000px;
+  padding: 1rem;
   font-weight: normal;
-}
-
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+  font-family: 'pt-mono', monospace;
 }
