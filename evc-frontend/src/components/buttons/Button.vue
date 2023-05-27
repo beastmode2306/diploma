@@ -1,5 +1,5 @@
 <template>
-  <button :class="{ hasError: hasError }" @click="callback">{{ title }}</button>
+  <button :class="{ hasError: hasError, disabled: disabled }" @click="onClick">{{ title }}</button>
 </template>
 
 <script setup>
@@ -21,8 +21,18 @@ const props = defineProps({
     default() {
       return () => {}
     }
+  },
+  disabled: {
+    type: Boolean,
+    default() {
+      return false
+    }
   }
 })
+
+const onClick = () => {
+  if (!props.disabled) props.callback()
+}
 </script>
 
 <style scoped>
@@ -46,5 +56,11 @@ button:hover {
 
 .hasError {
   border: 1px solid var(--base-danger-color);
+}
+
+.disabled {
+  cursor: not-allowed;
+  color: var(--base-disabled-color);
+  border: 1px solid var(--base-disabled-color);
 }
 </style>

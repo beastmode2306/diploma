@@ -1,5 +1,5 @@
 <template>
-  <p @click="onClick">{{ linkContent }}</p>
+  <p @click="onClick" :style="`--link-color: ${color}`">{{ linkContent }}</p>
 </template>
 
 <script setup>
@@ -14,6 +14,12 @@ const props = defineProps({
       return ''
     }
   },
+  color: {
+    type: String,
+    default() {
+      return '#6FE69F'
+    }
+  },
   link: {
     type: String,
     default() {
@@ -23,13 +29,13 @@ const props = defineProps({
 })
 
 const onClick = () => {
-  router.push(props.link)
+  if (props.link !== '') router.push(props.link)
 }
 </script>
 
 <style scoped>
 p {
-  color: var(--base-color);
+  color: var(--link-color);
   cursor: pointer;
   position: relative;
   font-size: 14px;
@@ -42,7 +48,7 @@ p:after {
   height: 2px;
   bottom: 2px;
   left: 0;
-  background-color: var(--base-color);
+  background-color: var(--link-color);
   transition: height 0.1s ease;
 }
 

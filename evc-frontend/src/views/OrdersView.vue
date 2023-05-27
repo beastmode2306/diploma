@@ -54,7 +54,7 @@ const orders = [
 header {
   display: flex;
   justify-content: space-between;
-  color: #6fe69f;
+  color: var(--base-white);
   padding: 10px 0px;
   font-family: 'pt-mono';
   font-weight: bold;
