@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "vue": "^3.3.2",
+    "vue-google-maps-community-fork": "^0.3.1",
     "vue-router": "^4.2.0",
-    "vuesax": "^4.0.1-alpha.25",
     "vuex": "^4.0.2"
   },
   "devDependencies": {

@@ -1,16 +1,33 @@
 <template>
-  <div class="order-item">
-    <div class="order-item-title-group">
-      <div class="title">Order #123</div>
-      <div class="status" :class="getBadgeClass('pending')">Approved</div>
+  <div class="order-item" :class="`border-${getBadgeClass(order.status)}`">
+    <div class="id-group">
+      <div class="order-id">Order {{ order.id }}</div>
+      <div class="order-date">{{ orderDate }}</div>
     </div>
+    <div class="order-positions">Positions: {{ order.details.length }}</div>
+    <div class="order-status" :class="getBadgeClass(order.status)">
+      {{ order.status.toUpperCase() }}
+    </div>
+    <Link link-content="View details" :link="`/order/${order.id}`" />
   </div>
 </template>
 
 <script setup>
+import Link from '../links/Link.vue'
 const props = defineProps({
-  title: String,
-  hasError: Boolean
+  order: {
+    type: Object,
+    required: true
+  }
+})
+
+const orderDate = new Date(props.order.createdAt).toLocaleDateString('en-GB', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  timeZone: 'UTC'
 })
 
 const getBadgeClass = (status) => {
@@ -31,27 +48,54 @@ const getBadgeClass = (status) => {
 .order-item {
   display: flex;
   width: 100%;
-  height: 100px;
   justify-content: space-between;
   background-color: #1f1f1f;
-  color: #1f1f1f;
-  padding: 20px 20px;
+  color: #dad8d8;
   font-family: 'pt-mono';
   font-weight: bold;
+  padding: 20px 20px;
   border-radius: 6px;
   margin: 20px 0;
+  position: relative;
+  align-items: center;
 }
-.order-item-title-group {
-  color: #dad8d8;
-  font-weight: bold;
+
+.order-date {
+  opacity: 0.7;
+  font-size: 12px;
+}
+
+.order-positions {
+  font-size: 14px;
+}
+
+.border-completed {
+  border-left: var(--base-color) 10px solid;
+}
+
+.border-cancelled {
+  border-left: #e74c3c 10px solid;
+}
+
+.border-pending {
+  border-left: #f1c40f 10px solid;
+}
+
+.item {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
+  width: 100%;
+  align-items: center;
 }
-.status {
-  color: var(--base-color);
+
+.order-id {
   font-weight: bold;
-  font-size: 18px;
+}
+
+.order-status {
+  font-weight: bold;
+  width: 100px;
+  text-align: center;
 }
 
 .cancelled {

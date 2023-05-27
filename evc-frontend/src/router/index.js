@@ -13,15 +13,18 @@ const router = createRouter({
       path: '/orders',
       name: 'orders',
       component: () => import('../views/OrdersView.vue')
+    },
+    {
+      path: '/order/:id',
+      name: 'order',
+      component: () => import('../views/SingleOrderView.vue'),
+      paras: true
+    },
+    {
+      path: '/orders/create',
+      name: 'create-order',
+      component: () => import('../views/CreateOrderView.vue')
     }
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/AboutView.vue')
-    // }
   ]
 })
 
