@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
+import store from '@/store/store.js'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -26,6 +28,18 @@ const router = createRouter({
       component: () => import('../views/CreateOrderView.vue')
     }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  const publicPages = ['home']
+  const authRequired = !publicPages.includes(to.name)
+  const loggedIn = store.getters.apiKey != null
+
+  if (authRequired && !loggedIn) {
+    return next('/')
+  }
+
+  next()
 })
 
 export default router

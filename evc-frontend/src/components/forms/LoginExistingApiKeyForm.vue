@@ -11,6 +11,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 import FormInput from '../inputs/FormInput.vue'
 import Button from '../buttons/Button.vue'
 
@@ -19,15 +20,23 @@ const apiKeyHasError = ref(false)
 const apiKey = ref('')
 
 const router = useRouter()
+const store = useStore()
 
 const handleApiKeyError = (data) => {
   apiKeyHasError.value = data
 }
 
-const submit = () => {
-  const validApiKey = checkApiKey(apiKey.value)
+const submit = async () => {
+  if (apiKey.value === '') {
+    apiKeyHasError.value = true
+    return
+  }
 
-  if (validApiKey) {
+  await store.dispatch('validateApiKey', apiKey.value)
+
+  const isValidApiKey = store.getters.apiKey !== null
+
+  if (isValidApiKey) {
     router.push('/orders')
   } else {
     apiKeyHasError.value = true

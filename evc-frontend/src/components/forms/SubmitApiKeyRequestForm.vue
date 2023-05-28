@@ -1,5 +1,6 @@
 <template>
-  <div class="api-key-request-form">
+  <ApiKeyRequested v-if="apiKeyRequested" />
+  <div class="api-key-request-form" v-else>
     <h2 class="title">Submit for your API key</h2>
     <div class="api-key-request-form-inner">
       <FormInput placeholder="Company name" v-model="companyName" @error="handleCompanyNameError" />
@@ -19,6 +20,12 @@
         @error="handleRequestReasonError"
       />
 
+      <div class="errors">
+        <div v-for="error in errors">
+          {{ error }}
+        </div>
+      </div>
+
       <Button title="Submit" @click="submit" :has-error="hasError" />
     </div>
   </div>
@@ -26,8 +33,10 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { instance } from '../../tools/axios'
 import FormInput from '../inputs/FormInput.vue'
 import FormTextArea from '../inputs/FormTextArea.vue'
+import ApiKeyRequested from '../../views/ApiKeyRequested.vue'
 import Button from '../buttons/Button.vue'
 
 const companyNameHasError = ref(false)
@@ -39,6 +48,10 @@ const companyName = ref('')
 const companyEmail = ref('')
 const companyCountry = ref('')
 const requestReason = ref('')
+
+const errors = ref([])
+
+const apiKeyRequested = ref(false)
 
 const hasError = computed(() => {
   return (
@@ -64,17 +77,38 @@ const handleCompanyCountryError = (data) => {
 const handleRequestReasonError = (data) => {
   requestReasonHasError.value = data
 }
-const submit = () => {
+
+const handleSubmitError = (data) => {
+  errors.value = data?.response?.data?.error?.message || []
+}
+
+const handleSubmitSuccess = () => {
+  apiKeyRequested.value = true
+}
+
+const submit = async () => {
   companyNameHasError.value = companyName.value === ''
   companyEmailHasError.value = companyEmail.value === ''
   companyCountryHasError.value = companyCountry.value === ''
   requestReasonHasError.value = requestReason.value === ''
 
-  return hasError.value
+  if (hasError.value) {
+    return
+  }
+
+  instance
+    .post('/key/submit', {
+      companyName: companyName.value,
+      companyEmail: companyEmail.value,
+      companyCountry: companyCountry.value,
+      message: requestReason.value
+    })
+    .then(handleSubmitSuccess)
+    .catch(handleSubmitError)
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .api-key-request-form {
   max-width: 80%;
   margin: 0 auto;
@@ -86,5 +120,18 @@ const submit = () => {
   border: 1px solid #393939;
   padding: 20px;
   margin-top: 20px;
+}
+
+.errors {
+  color: var(--base-danger-color);
+  margin-bottom: 20px;
+
+  div {
+    margin-left: 20px;
+    margin-bottom: 2px;
+    list-style: none;
+    font-size: 12px;
+    opacity: 0.9;
+  }
 }
 </style>

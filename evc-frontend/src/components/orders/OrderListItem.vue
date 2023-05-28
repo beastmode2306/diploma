@@ -6,7 +6,7 @@
     </div>
     <div class="order-positions">Positions: {{ order.details.length }}</div>
     <div class="order-status" :class="getBadgeClass(order.status)">
-      {{ order.status.toUpperCase() }}
+      {{ order.status }}
     </div>
     <Link link-content="View details" :link="`/order/${order.id}`" />
   </div>
@@ -21,7 +21,9 @@ const props = defineProps({
   }
 })
 
-const orderDate = new Date(props.order.createdAt).toLocaleDateString('en-GB', {
+console.log('++', props.order)
+
+const orderDate = new Date(props.order.updatedAt).toLocaleDateString('en-GB', {
   day: '2-digit',
   month: '2-digit',
   year: 'numeric',
@@ -32,11 +34,11 @@ const orderDate = new Date(props.order.createdAt).toLocaleDateString('en-GB', {
 
 const getBadgeClass = (status) => {
   switch (status) {
-    case 'cancelled':
+    case 'CANCELLED':
       return 'cancelled'
-    case 'completed':
+    case 'COMPLETED':
       return 'completed'
-    case 'pending':
+    case 'PENDING':
       return 'pending'
     default:
       return ''

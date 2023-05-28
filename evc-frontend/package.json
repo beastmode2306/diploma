@@ -10,6 +10,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "axios": "^1.4.0",
     "vue": "^3.3.2",
     "vue-google-maps-community-fork": "^0.3.1",
     "vue-router": "^4.2.0",
@@ -22,6 +23,7 @@
     "eslint": "^8.39.0",
     "eslint-plugin-vue": "^9.11.0",
     "prettier": "^2.8.8",
+    "sass": "^1.62.1",
     "vite": "^4.3.5"
   }
 }

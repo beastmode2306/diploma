@@ -39,6 +39,8 @@ p {
   cursor: pointer;
   position: relative;
   font-size: 14px;
+  display: inline;
+  height: 1.7em;
 }
 
 p:after {

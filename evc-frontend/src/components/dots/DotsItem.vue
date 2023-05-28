@@ -1,9 +1,9 @@
 <template>
-  <div class="dot-item">
+  <div class="dot-item" :style="`--border-color-dot-item: ${color}`">
     <div class="dot-id">Dot {{ props.idx + 1 }}</div>
     <div class="dot-lat">Lat: {{ props.dot.position.lat }}</div>
     <div class="dot-lng">Lng: {{ props.dot.position.lng }}</div>
-    <Link color="#ff0658" link-content="Remove" @click="onRemove(props.dot.id)" />
+    <Link v-if="hasRemove" color="#ff0658" link-content="Remove" @click="onRemove(props.dot.id)" />
   </div>
 </template>
 
@@ -23,6 +23,18 @@ const props = defineProps({
   onRemove: {
     type: Function,
     required: true
+  },
+  hasRemove: {
+    type: Boolean,
+    default() {
+      return true
+    }
+  },
+  color: {
+    type: String,
+    default() {
+      return '#fff'
+    }
   }
 })
 </script>
@@ -31,13 +43,15 @@ const props = defineProps({
 .dot-item {
   margin: 10px 0;
   width: 100%;
-  padding: 15px 20px;
+  padding: 10px 15px;
   background-color: #1f1f1f;
   color: var(--base-white);
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: relative;
+  border-left: 10px solid var(--border-color-dot-item);
+  border-radius: 6px;
 }
 
 .dot-id {

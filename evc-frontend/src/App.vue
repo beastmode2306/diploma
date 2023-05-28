@@ -2,15 +2,19 @@
 import { RouterLink, RouterView } from 'vue-router'
 import Header from './components/Header.vue'
 
+import { useStore } from 'vuex'
+
+const store = useStore()
+
+store.commit('INIT')
 </script>
 
 <template>
-  <Header/>
+  <Header />
   <RouterView />
 </template>
 
 <style>
-
 @font-face {
   src: url('./fonts/pt-mono.bold.ttf') format('truetype');
   font-family: 'pt-mono';
@@ -24,5 +28,4 @@ import Header from './components/Header.vue'
   font-weight: normal;
   font-style: normal;
 }
-
 </style>

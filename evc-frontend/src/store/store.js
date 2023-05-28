@@ -1,9 +1,11 @@
 import { createStore } from 'vuex'
-import todos from './modules/todos/todos'
+import orders from './modules/orders.js'
+import auth from './modules/auth.js'
 
 const store = createStore({
   modules: {
-    todos
+    orders,
+    auth
   }
 })
 
