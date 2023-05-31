@@ -16,5 +16,4 @@ COPY --chown=node:node --from=build /usr/src/app-consumer/package-lock.json .
 RUN npm install --omit=dev
 
 ENV NODE_ENV production
-EXPOSE 8001
 CMD ["dumb-init", "node", "dist/main"]

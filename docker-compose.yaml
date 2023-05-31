@@ -18,8 +18,6 @@ services:
     build:
       context: ./evc-consumer
       dockerfile: Dockerfile
-    ports:
-      - '8001:8001'
     restart: always
     depends_on:
       - rabbitmq

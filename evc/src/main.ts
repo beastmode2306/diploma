@@ -16,6 +16,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new TransformationInterceptor());
+  app.enableCors();
 
   await app.listen(configService.get('PORT'), () => {
     console.log(`Listening on port ${configService.get('PORT')}`);

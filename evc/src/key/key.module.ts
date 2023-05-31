@@ -4,11 +4,12 @@ import { KeyController } from './key.controller';
 import { CompanyModule } from '../company/company.module';
 import { NotificationModule } from '../notification/notification.module';
 import { ApiKeyGuard } from './guards/apiKey.guard';
+import { GovernanceKeyGuard } from './guards/governanceKey.guard';
 
 @Module({
   imports: [CompanyModule, NotificationModule],
   controllers: [KeyController],
-  providers: [KeyService, ApiKeyGuard],
-  exports: [KeyService, ApiKeyGuard],
+  providers: [KeyService, ApiKeyGuard, GovernanceKeyGuard],
+  exports: [KeyService, ApiKeyGuard, GovernanceKeyGuard],
 })
 export class KeyModule {}

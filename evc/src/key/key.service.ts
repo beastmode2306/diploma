@@ -19,6 +19,7 @@ import { UpdateApiKeyRequestDto } from './dtos/updateApiKeyRequest.dto';
 import { CompanyService } from '../company/company.service';
 import { CreateApiKeyDto } from './dtos/createApiKey.dto';
 import { NotificationService } from '../notification/notification.service';
+import { GetKeyRequestsDto } from './dtos/getKeyRequests.dto';
 
 @Injectable()
 export class KeyService {
@@ -27,6 +28,20 @@ export class KeyService {
     private companyService: CompanyService,
     private notificationService: NotificationService,
   ) {}
+
+  async getKeyRequests({
+    status,
+  }: GetKeyRequestsDto): Promise<ApiKeyRequest[]> {
+    const where: Prisma.ApiKeyRequestWhereInput = {};
+
+    if (status) {
+      where.status = status;
+    }
+
+    return this.prisma.apiKeyRequest.findMany({
+      where,
+    });
+  }
 
   async submitApiKeyRequest({
     companyName,

@@ -69,3 +69,36 @@ export function formatToDto(points: Point[]): PointDto[] {
     y: point.y.toString(),
   })) as PointDto[];
 }
+
+export function findFurthestPoint(
+  point: Point,
+  points: Point[],
+): {
+  point: Point;
+  distance: number;
+} {
+  const R = 6371e3; // Earth's radius in meters
+  const toRad = Math.PI / 180;
+  const toDeg = 180 / Math.PI;
+  const latCorrection = R * toRad;
+  const lngCorrection = R * Math.cos(point.x * toRad) * toRad;
+
+  let furthestPoint = null;
+  let furthestDistance = 0;
+
+  points.forEach((p) => {
+    const dx = (point.x - p.x) * lngCorrection;
+    const dy = (point.y - p.y) * latCorrection;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance > furthestDistance) {
+      furthestDistance = distance;
+      furthestPoint = p;
+    }
+  });
+
+  return {
+    point: furthestPoint,
+    distance: furthestDistance, // The distance in meters
+  };
+}
