@@ -1,6 +1,10 @@
 export function convertCoordinates(data) {
   const result = []
 
+  if (!data) {
+    return result
+  }
+
   for (const obj of data) {
     const convertedObj = {
       input: sortPointsClockwise(
@@ -9,7 +13,10 @@ export function convertCoordinates(data) {
       result: {
         originalPoints: obj.result.originalPoints.map(({ x, y }) => ({ lat: x, lng: y })),
         nearestRoads: obj.result.nearestRoads.map(({ x, y }) => ({ lat: x, lng: y })),
-        nearestGasStations: obj.result.nearestGasStations.map(({ x, y }) => ({ lat: x, lng: y }))
+        nearestGasStations: obj.result.nearestGasStations.map(({ x, y }) => ({ lat: x, lng: y })),
+        nearPowerLines: obj.result.nearPowerLines.map(({ geometry }) =>
+          geometry.map(({ lat, lon }) => ({ lat, lng: lon }))
+        )
       }
     }
 

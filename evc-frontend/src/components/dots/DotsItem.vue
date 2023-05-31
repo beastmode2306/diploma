@@ -1,6 +1,6 @@
 <template>
   <div class="dot-item" :style="`--border-color-dot-item: ${color}`">
-    <div class="dot-id">Dot {{ props.idx + 1 }}</div>
+    <div class="dot-id">{{ props.title }} {{ props.idx + 1 }}</div>
     <div class="dot-lat">Lat: {{ props.dot.position.lat }}</div>
     <div class="dot-lng">Lng: {{ props.dot.position.lng }}</div>
     <Link v-if="hasRemove" color="#ff0658" link-content="Remove" @click="onRemove(props.dot.id)" />
@@ -12,6 +12,12 @@ import { ref } from 'vue'
 import Link from '../links/Link.vue'
 
 const props = defineProps({
+  title: {
+    type: String,
+    default() {
+      return 'Dot'
+    }
+  },
   idx: {
     type: Number,
     required: true
@@ -22,7 +28,9 @@ const props = defineProps({
   },
   onRemove: {
     type: Function,
-    required: true
+    default() {
+      return () => {}
+    }
   },
   hasRemove: {
     type: Boolean,
@@ -57,6 +65,7 @@ const props = defineProps({
 .dot-id {
   font-size: 16px;
   font-weight: bold;
+  width: 150px;
 }
 
 .dot-lat,

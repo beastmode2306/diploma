@@ -17,8 +17,6 @@ instance.interceptors.request.use((config) => {
     config.headers['X-API-KEY'] = store.getters.apiKey
   }
 
-  console.log(config.headers)
-
   return config
 })
 

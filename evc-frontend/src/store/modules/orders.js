@@ -1,4 +1,5 @@
 import { instance } from '@/tools/axios'
+import { convertCoordinates } from '../../tools/utils'
 
 const state = {
   orders: [],
@@ -7,7 +8,17 @@ const state = {
 
 const getters = {
   orders: (state) => state.orders,
-  order: (state) => state.order
+  order: (state) => state.order,
+  orderDetails: (state) => {
+    return convertCoordinates(
+      state.order?.value?.details?.map((detail) => ({
+        input: JSON.parse(detail.points),
+        result: {
+          ...JSON.parse(detail.result)
+        }
+      }))
+    )
+  }
 }
 
 const mutations = {
