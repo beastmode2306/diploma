@@ -23,7 +23,7 @@ model ApiKeyRequest {
 
 model Company {
   id      Int           @id @default(autoincrement())
-  email   String        @unique
+  email   String
   name    String?
   country String?
   status  CompanyStatus @default(ACTIVE)
@@ -31,6 +31,8 @@ model Company {
   orders  Order[]
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
+
+  @@unique([email, country])
 }
 
 model Key {

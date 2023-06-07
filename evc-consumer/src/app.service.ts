@@ -4,6 +4,7 @@ import { Point } from './core/types';
 import { PointDto } from './dtos/submitRequest.dto';
 import { GoogleMapsService } from './googleMaps.service';
 import { HttpService } from '@nestjs/axios';
+import * as fs from 'fs';
 
 export interface OrderResponse {
   originalPoints: Point[];
@@ -26,8 +27,6 @@ export class AppService {
       chargingStationLocations[0],
       formattedPoints,
     );
-
-    console.log('distance', distance);
 
     const chargingStationLocationsFormatted = formatToDto(
       chargingStationLocations,
@@ -57,6 +56,7 @@ export class AppService {
   generateOverpassQuery(point: PointDto, radius: number): string {
     const query = `[out:json];
     way(around: ${radius ?? 100}, ${point.x}, ${point.y})["power"~"line"];
+    way(around: ${radius ?? 100}, ${point.x}, ${point.y})["power"~"minor_line"];
     out geom;`;
     return query;
   }

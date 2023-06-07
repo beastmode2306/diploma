@@ -20,6 +20,9 @@ export class ApiService {
         details: true,
         company: true,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
   }
 

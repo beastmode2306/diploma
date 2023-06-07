@@ -24,14 +24,14 @@ export class CompanyService {
   }
 
   async getCompanyById(id: number) {
-    return this.prisma.company.findUnique({
-      where: { id: id },
+    return this.prisma.company.findFirst({
+      where: { id },
     });
   }
 
   async getCompanyByEmail(email: string) {
-    return this.prisma.company.findUnique({
-      where: { email: email },
+    return this.prisma.company.findFirst({
+      where: { email },
     });
   }
 
@@ -43,7 +43,7 @@ export class CompanyService {
 
   async updateCompany(id: number, data: UpdateCompanyDto) {
     return this.prisma.company.update({
-      where: { id: id },
+      where: { id },
       data,
     });
   }
