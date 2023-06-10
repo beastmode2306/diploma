@@ -1,6 +1,16 @@
 version: '3'
 
 services:
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+      - '443:443'
+    restart: always
+    depends_on: app
+
   app:
     build:
       context: ./evc
@@ -11,9 +21,13 @@ services:
     depends_on:
       - db
       - rabbitmq
+    environment:
+      - RABBIT_HOST=rabbitmq
+      - DATABASE_URL="postgresql://postgres:root@postgres:5432/main?schema=public"
     networks:
       - postgres_bridge_network
       - rabbitmq_bridge_network
+
   app-consumer:
     build:
       context: ./evc-consumer
@@ -21,8 +35,11 @@ services:
     restart: always
     depends_on:
       - rabbitmq
+    environment:
+      - RABBIT_HOST=rabbitmq
     networks:
       - rabbitmq_bridge_network
+
   db:
     image: postgres
     restart: always
@@ -38,6 +55,7 @@ services:
       - postgres-db:/data/postgres
     networks:
         - postgres_bridge_network
+
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: "rabbitmq"

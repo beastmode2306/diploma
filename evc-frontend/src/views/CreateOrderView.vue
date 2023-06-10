@@ -23,7 +23,11 @@
       <div class="create-order-group">
         <h3>Selected points</h3>
         <div class="create-order-btn">
-          <Button title="Create Order" :disabled="markers.length < 2" :callback="createOrder" />
+          <Button
+            title="Create Order"
+            :disabled="markers.length < 2 || markers.length > 10"
+            :callback="createOrder"
+          />
         </div>
       </div>
       <div class="dots-list">
@@ -135,7 +139,6 @@ const createOrder = () => {
   orderCreation.then(() => {
     orderCreated.value = true
   })
-  console.log('create order')
 }
 </script>
 

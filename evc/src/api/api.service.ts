@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { SubmitRequestDto } from './dtos/submitRequest.dto';
 import { Order, OrderDetails, OrderStatus } from '@prisma/client';
@@ -43,6 +43,9 @@ export class ApiService {
     dto: SubmitRequestDto,
     companyId: number,
   ): Promise<{ order: Order; orderDetail: OrderDetails }> {
+    if (dto.points.length < 2 || dto.points.length > 10) {
+      throw new BadRequestException('Invalid number of points');
+    }
     const order = (await this.prisma.order.create({
       data: {
         companyId,
@@ -97,8 +100,10 @@ export class ApiService {
 
       await this.notificationService.sendEmail({
         to: order.company.email,
-        subject: 'Your order is ready',
-        text: `Your order is ready. You can view your results by id: ${order.id}`,
+        type: 'order',
+        data: {
+          order_link: `${process.env.FRONTEND_URL}/order/${order.id}`,
+        },
       });
     }
   }

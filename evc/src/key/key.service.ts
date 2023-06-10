@@ -130,8 +130,10 @@ export class KeyService {
 
     await this.notificationService.sendEmail({
       to: apiKeyRequest.company_email,
-      subject: 'Your API key has been approved',
-      text: `Your API key has been approved. Your API key is ${apiKey}`,
+      type: 'apiKey',
+      data: {
+        api_key: apiKey,
+      },
     });
 
     return {
