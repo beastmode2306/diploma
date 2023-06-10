@@ -52,6 +52,7 @@ export class KeyService {
     const existingRequest = await this.prisma.apiKeyRequest.findFirst({
       where: {
         company_email: companyEmail,
+        company_country: companyCountry,
         status: {
           not: ApiKeyRequestStatus.DECLINED,
         },

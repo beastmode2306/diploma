@@ -19,7 +19,11 @@
     <div class="btn">
       <Button :callback="onButtonClick" title="Back to orders" />
     </div>
-    <div class="details-list">
+
+    <div v-if="computedOrder.status === 'PENDING'">
+      <h1>Your order is still under processing.</h1>
+    </div>
+    <div class="details-list" v-else>
       <div class="details-item" v-for="(detail, index) in orderDetails">
         <p>Order Detail {{ index + 1 }}</p>
 

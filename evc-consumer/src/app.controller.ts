@@ -17,7 +17,6 @@ export class AppController {
     @Payload() data: SubmitRequestDto,
     @Ctx() context: RmqContext,
   ): Promise<SubmitRequestDto> {
-    console.log('submit_order');
     const points = await this.appService.processOrder(data.points);
 
     return {

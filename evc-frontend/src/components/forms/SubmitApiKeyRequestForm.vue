@@ -21,8 +21,11 @@
       />
 
       <div class="errors">
-        <div v-for="error in errors">
+        <div v-for="error in errors" v-if="errors instanceof Array">
           {{ error }}
+        </div>
+        <div v-else>
+          {{ errors }}
         </div>
       </div>
 
