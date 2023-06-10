@@ -6,10 +6,14 @@ services:
       context: ./nginx
       dockerfile: Dockerfile
     ports:
-      - '80:80'
+      - '8080:80'
       - '443:443'
     restart: always
-    depends_on: app
+    depends_on:
+      - app
+    networks:
+      - postgres_bridge_network
+      - rabbitmq_bridge_network
 
   app:
     build:
@@ -21,9 +25,6 @@ services:
     depends_on:
       - db
       - rabbitmq
-    environment:
-      - RABBIT_HOST=rabbitmq
-      - DATABASE_URL="postgresql://postgres:root@postgres:5432/main?schema=public"
     networks:
       - postgres_bridge_network
       - rabbitmq_bridge_network
@@ -35,8 +36,6 @@ services:
     restart: always
     depends_on:
       - rabbitmq
-    environment:
-      - RABBIT_HOST=rabbitmq
     networks:
       - rabbitmq_bridge_network
 
@@ -54,7 +53,7 @@ services:
     volumes:
       - postgres-db:/data/postgres
     networks:
-        - postgres_bridge_network
+      - postgres_bridge_network
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
