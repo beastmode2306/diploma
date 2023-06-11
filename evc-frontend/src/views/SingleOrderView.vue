@@ -103,7 +103,7 @@
               :position="marker"
               :zIndex="1"
               :icon="{
-                url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+                url: 'https://maps.google.com/mapfiles/ms/icons/pink-dot.png',
                 scaledSize: { width: 30, height: 30 }
               }"
             />
@@ -114,7 +114,7 @@
               :position="marker"
               :zIndex="1"
               :icon="{
-                url: 'https://maps.google.com/mapfiles/ms/icons/pink-dot.png',
+                url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
                 scaledSize: { width: 30, height: 30 }
               }"
             />
