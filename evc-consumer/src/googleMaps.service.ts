@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PointDto } from './dtos/submitRequest.dto';
-import { Client } from '@googlemaps/google-maps-services-js';
+import { Client, TravelMode } from '@googlemaps/google-maps-services-js';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -22,6 +22,8 @@ export class GoogleMapsService extends Client {
   }
 
   async findNearestRoad(point: PointDto) {
+    let result = null;
+
     const nearestRoadRaw = await this.nearestRoads({
       params: {
         points: [[point.x, point.y].join(',')],
@@ -29,12 +31,28 @@ export class GoogleMapsService extends Client {
       },
     });
 
-    const nearestRoads = nearestRoadRaw?.data?.snappedPoints || [];
-    const filteredNearestRoads = this.filterResponse(nearestRoads, 'location');
+    if (nearestRoadRaw?.data?.snappedPoints == undefined) {
+      const nearestRoadViaDirections = await this.directions({
+        params: {
+          origin: [point.x, point.y].join(','),
+          destination: [point.x, point.y].join(','),
+          key: this.accessKey,
+          mode: TravelMode.driving,
+        },
+      });
 
-    return filteredNearestRoads.map((item) => ({
-      x: item.location.latitude,
-      y: item.location.longitude,
+      result = [
+        nearestRoadViaDirections?.data?.routes[0]?.legs[0]?.steps[0]
+          ?.start_location,
+      ];
+    } else {
+      const nearestRoads = nearestRoadRaw?.data?.snappedPoints || [];
+      result = this.filterResponse(nearestRoads, 'location');
+    }
+
+    return result.map((item) => ({
+      x: item.location?.latitude || item.lat,
+      y: item.location?.longitude || item.lng,
     }));
   }
 
